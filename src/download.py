@@ -1,25 +1,35 @@
-import requests
+#!/usr/bin/env python3
+
+import io
+import os
 import pathlib
+import sys
 from zipfile import ZipFile
 
-data_folder = pathlib.Path('../data/')
-zip_filepath = data_folder / 'data.zip'
-url = 'https://questionsacm.isograd.com/codecontest/sample_input_output/sample-lJdOuPUVRty107MkPy5Em4OWCFIWHYf6rV_gf6jAgU4.zip'
+import requests
 
-r = requests.get(url)
+DEFAULT_URL = 'https://questionsacm.isograd.com/codecontest/sample_input_output/sample-lJdOuPUVRty107MkPy5Em4OWCFIWHYf6rV_gf6jAgU4.zip'
 
-with open(zip_filepath, 'wb') as f:
-    f.write(r.content)
+# Make paths relative to the folder containing the script so that it can be called from anywhere
+src_dir = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
+data_dir = pathlib.Path(src_dir / '../data/')
+zip_filepath = data_dir / 'data.zip'
+url = sys.argv[1] if len(sys.argv) >= 2 else DEFAULT_URL
 
-# Create a ZipFile Object and load sample.zip in it
-with ZipFile(zip_filepath, 'r') as zipObj:
-    # Get a list of all archived file names from the zip
-    listOfFileNames = zipObj.namelist()
-    # Iterate over the file names
-    for fileName in listOfFileNames:
-        # Check filename endswith csv
-        if fileName.endswith('.txt'):
-            # Extract a single file from zip
-            zipObj.extract(fileName, path=data_folder)
-            with open(data_folder / pathlib.PurePath(fileName).name, 'wb') as f_out:
-                f_out.write(zipObj.read(fileName))
+# Get zip from url
+response = requests.get(url)
+if not response:
+    exit('Invalid response, got status code {}'.format(response.status_code))
+zip_file = ZipFile(io.BytesIO(requests.get(url).content))
+
+# Delete existing txt files from data folder
+txt_files = os.listdir(data_dir)
+for file in txt_files:
+    if file.endswith('.txt'):
+        os.remove(data_dir / file)
+
+# Extract .txt files to data folder
+for fileName in zip_file.namelist():
+    if fileName.endswith('.txt'):
+        with open(data_dir / pathlib.PurePath(fileName).name, 'wb') as f_out:
+            f_out.write(zip_file.read(fileName))

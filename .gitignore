@@ -265,3 +265,7 @@ dmypy.json
 .history
 
 # End of https://www.gitignore.io/api/python,eclipse,jetbrains+iml,visualstudiocode
+
+# Python Virtual env
+/env/
+/venv/
