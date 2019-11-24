@@ -34,5 +34,8 @@ def solve(
 
 
 if __name__ == '__main__':
-    # use stdin and stdout when called directly
-    solve(sys.stdin, sys.stdout)
+    if len(sys.argv) >= 2:
+        with open(sys.argv[1], 'r') as input_f:
+            solve(input_f, sys.stdout)
+    else:
+        solve(sys.stdin, sys.stdout)
