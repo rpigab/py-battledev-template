@@ -8,7 +8,7 @@ from zipfile import ZipFile
 
 import requests
 
-DEFAULT_URL = 'https://questionsacm.isograd.com/codecontest/sample_input_output/sample-lJdOuPUVRty107MkPy5Em4OWCFIWHYf6rV_gf6jAgU4.zip'
+DEFAULT_URL = 'https://questionsacm.isograd.com/codecontest/sample_input_output/sample-mh9obPJDA3jFjq-0S_MuXYraervgEiilbIn8Hz1mjlk.zip'
 
 # Make paths relative to the folder containing the script so that it can be called from anywhere
 src_dir = pathlib.Path(os.path.dirname(os.path.abspath(__file__)))
