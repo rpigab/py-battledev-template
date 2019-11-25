@@ -15,22 +15,42 @@ def solve(
     input_gen = (line.rstrip('\n') for line in input_stream)
     output = output_stream
 
-    my_current_pos = int(input_stream.readline())
+    taille_grille = int(input_stream.readline())
 
-    for line in input_gen:
-        [nb_who_overtook_me, nb_overtook_by_me] = [int(i) for i in line.split(' ')]
-        my_current_pos = my_current_pos - nb_overtook_by_me + nb_who_overtook_me
+    multiplicateurs = []
+    coins = []
 
-    # top 100
-    res = ''
-    if my_current_pos <= 100:
-        res = '1000'
-    elif my_current_pos <= 10000:
-        res = '100'
-    else:
-        res = 'KO'
+    current_pos = (0,0)
+    chemin = ''
 
-    output.write(res)
+    # trouver les bonus
+    for y, line in enumerate(input_stream):
+        for x, c in enumerate(line):
+            if c == '*':
+                multiplicateurs.append((x,y))
+            elif c == 'o':
+                coins.append((x,y))
+
+    # les parcourir
+    for elt in coins + multiplicateurs:
+        if current_pos[0] < elt[0]:
+            # go right
+            chemin += '>' * (elt[0] - current_pos[0])
+        elif current_pos[0] > elt[0]:
+            # go left
+            chemin += '<' * (current_pos[0] - elt[0])
+        if current_pos[1] < elt[1]:
+            # go down
+            chemin += 'v' * (elt[1] - current_pos[1])
+        elif current_pos[1] > elt[1]:
+            # go up
+            chemin += '^' * (current_pos[1] - elt[1])
+        # assume we're at dest
+        current_pos = elt
+        # pickup
+        chemin += 'x'
+
+    output.write(chemin)
 
 
 if __name__ == '__main__':
