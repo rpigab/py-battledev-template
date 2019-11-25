@@ -15,22 +15,26 @@ def solve(
     input_gen = (line.rstrip('\n') for line in input_stream)
     output = output_stream
 
-    my_current_pos = int(input_stream.readline())
+    nb_cartons = int(input_stream.readline())
 
-    for line in input_gen:
-        [nb_who_overtook_me, nb_overtook_by_me] = [int(i) for i in line.split(' ')]
-        my_current_pos = my_current_pos - nb_overtook_by_me + nb_who_overtook_me
+    poids_sur_montecharge = 0
+    nb_allers_retours = 0
 
-    # top 100
-    res = ''
-    if my_current_pos <= 100:
-        res = '1000'
-    elif my_current_pos <= 10000:
-        res = '100'
-    else:
-        res = 'KO'
+    for poids_carton in (int(i) for i in input_gen):
+        total = poids_carton + poids_sur_montecharge
+        if total > 100:
+            # on envoie avec juste les cartons en cours, le courant sera seul sur le MC apres coup
+            nb_allers_retours += 1
+            poids_sur_montecharge = poids_carton
+        else:
+            # on rajoute le carton courant en plus sur le MC, on envoie pas
+            poids_sur_montecharge = total
+        debug('MC: {}, allers-retours: {}'.format(poids_sur_montecharge, nb_allers_retours))
 
-    output.write(res)
+    # un petit dernier pour la route
+    nb_allers_retours += 1
+
+    output.write(str(nb_allers_retours))
 
 
 if __name__ == '__main__':
