@@ -34,8 +34,8 @@ def solve(
 
 
 if __name__ == '__main__':
-    if len(sys.argv) >= 2:
-        with open(sys.argv[1], 'r') as input_f:
+    if len(sys.argv) == 3 and sys.argv[1] == 'file':
+        with open(sys.argv[2], 'r') as input_f:
             solve(input_f, sys.stdout)
     else:
         solve(sys.stdin, sys.stdout)
