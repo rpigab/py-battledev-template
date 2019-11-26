@@ -15,20 +15,15 @@ def solve(
     input_gen = (line.rstrip('\n') for line in input_stream)
     output = output_stream
 
-    my_current_pos = int(input_stream.readline())
-
-    for line in input_gen:
-        [nb_who_overtook_me, nb_overtook_by_me] = [int(i) for i in line.split(' ')]
-        my_current_pos = my_current_pos - nb_overtook_by_me + nb_who_overtook_me
-
-    # top 100
+    nb_personnes = int(input_stream.readline())
     res = ''
-    if my_current_pos <= 100:
-        res = '1000'
-    elif my_current_pos <= 10000:
-        res = '100'
-    else:
-        res = 'KO'
+    longueur_p = 88888888
+    for line in input_gen:
+        [nom, longueur_s] = [i for i in line.split(' ')]
+        longueur = int(longueur_s)
+        if longueur < longueur_p:
+            res = nom
+            longueur_p = longueur
 
     output.write(res)
 
