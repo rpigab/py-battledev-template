@@ -27,8 +27,11 @@ def solve(
     for s in sets[1:]:
         inters = inters.intersection(s)
 
+    if not inters or len(inters) == 0:
+        output.write('KO')
+        exit()
     inters = str(inters)
-    debug(inters)
+    debug('inters:' + inters)
 
     mots_n = []
     min_chars = 0
