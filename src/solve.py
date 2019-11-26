@@ -7,7 +7,7 @@ import sys
 def solve(
         input_stream,
         output_stream,
-        debug=lambda x: sys.stderr.write(x + '\n')):
+        debug=lambda x: sys.stderr.write(str(x) + '\n')):
     """Solves the problem,
     Reading input from input_stream and writing solution to output_stream
     Messages written to debug aren't written to output_stream
