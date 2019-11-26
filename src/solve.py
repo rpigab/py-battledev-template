@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import itertools
 import sys
 
 
@@ -30,20 +31,47 @@ def solve(
     if not inters or len(inters) == 0:
         output.write('KO')
         exit()
-    inters = str(inters)
-    debug('inters:' + inters)
 
-    mots_n = []
-    min_chars = 0
+    mots = [''.join([c for c in m if c in inters]) for m in mots]
+    debug(mots)
+
+    possible_words = set()
+
     for mot in mots:
-        mot_n = [c for c in mot if c in inters]
-        min_chars = len(mot_n)
-        mots_n.append(''.join(mot_n))
+        res = [mot[x:y] for x, y in itertools.combinations(
+            range(len(mot) + 1), r=2)]
+        possible_words.update(res)
 
-    mots_n = ''.join([m for m in mots_n if len(m) == min_chars])
-    debug(mots_n)
+    debug('possible_words: ' + str(possible_words))
 
-    output.write(mots_n)
+    possible_words2 = []
+
+    for idx, m in enumerate(mots):
+        possible_words2.append(set())
+        for p in possible_words:
+            p_i = 0
+            m_t = ''
+            for m_c in m:
+                if p_i >= len(p):
+                    continue
+                if p[p_i] == m_c:
+                    m_t += m_c
+                p_i += 1
+            # debug('m_t: {}'.format(m_t))
+            possible_words2[idx].add(m_t)
+            # debug('p: {}, m: {}'.format(p, m))
+    debug(possible_words2)
+
+    inters = possible_words2[0]
+    for t in possible_words2[1:]:
+        inters = inters.intersection(t)
+    debug(inters)
+
+    # maximum = max([len(m) for m in possible_words2])
+    # debug(maximum)
+    # possible_words2 = [m for m in possible_words2 if len(m) == maximum]
+    # debug(possible_words2)
+    output.write('KO')
 
 
 if __name__ == '__main__':
