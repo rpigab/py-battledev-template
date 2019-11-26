@@ -24,10 +24,10 @@ if not response:
 zip_file = ZipFile(io.BytesIO(requests.get(url).content))
 
 # Delete existing txt files from data folder
-print('Deleting .txt files from data folder')
+print('Deleting .txt and .out files from data folder')
 txt_files = os.listdir(data_dir)
 for file in txt_files:
-    if file.endswith('.txt'):
+    if file.endswith('.txt') or file.endswith('.out'):
         os.remove(data_dir / file)
 
 # Extract .txt files to data folder
