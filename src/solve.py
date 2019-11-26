@@ -21,14 +21,14 @@ def solve(
     mots = [i for i in input_gen]
     sets = [set(i) for i in mots]
 
-    debug(str(mots))
+    debug(mots)
 
     inters = sets[0]
     for s in sets[1:]:
         inters = inters.intersection(s)
 
     inters = str(inters)
-    debug(str(inters))
+    debug(inters)
 
     mots_n = []
     min_chars = 0
@@ -38,7 +38,7 @@ def solve(
         mots_n.append(''.join(mot_n))
 
     mots_n = ''.join([m for m in mots_n if len(m) == min_chars])
-    debug(str(mots_n))
+    debug(mots_n)
 
     output.write(mots_n)
 
