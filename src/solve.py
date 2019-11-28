@@ -39,30 +39,37 @@ def solve(
     debug('nb_cables: {}, nb_requetes: {}'.format(nb_cables, nb_requetes))
 
     res = []
-    # cable_courant = 0
-    cables = [-1 for i in range(nb_cables)]
+    cables = [None for i in range(nb_cables)]
+
     for line in input_gen:
-        [deb, fin] = [int(i) for i in line.split(' ')]
+        [debut_requete, fin_requete] = [int(i) for i in line.split(' ')]
         cable_courant = 0
         used = False
         while cable_courant <= nb_cables:
-            if deb >= cables[cable_courant]:
-                # utiliser ce cable
-                cables[cable_courant] = fin
-                res.append(cable_courant+1)
+            # Si le cable n'est pas encore utilisé
+            # ou qu'il n'est utilisé que jusqu'à un instant inférieur au début de la requête
+            if not cables[cable_courant] or debut_requete >= cables[cable_courant]:
+                # Utiliser ce cable
+                # On stocke dans le, tableau d'utilisation des cables la date de fin
+                # Pour savoir à quel moment il sera à nouveau disponible
+                cables[cable_courant] = fin_requete
+                res.append(cable_courant + 1)
                 used = True
                 break
             else:
+                # Avancer l'indice pour tester le cable suivant au prochain passage de la boucle while
                 cable_courant += 1
                 if cable_courant >= nb_cables:
                     cable_courant = 0
+        # Si aucun des N cables n'est disponible pour cette requête, indiquer que c'est impossible
         if not used:
             output.write('pas possible')
             exit()
+
     debug(cables)
 
-    # top 100
-    output.write(' '.join([str(i) for i in res]))
+    # Écrire la solution
+    output.write(' '.join([str(i) for i in res]) + '\n')
 
 
 if __name__ == '__main__':
